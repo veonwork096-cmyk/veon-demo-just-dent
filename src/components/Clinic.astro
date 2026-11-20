@@ -1,0 +1,77 @@
+---
+// Editorial layout of the client's own photos. Phones: a horizontal strip with scroll-snap.
+import { Picture } from "astro:assets";
+import roomLight from "../assets/img/clinic-room-light.webp";
+import doctorWork from "../assets/img/clinic-doctor-work.webp";
+import roomBlinds from "../assets/img/clinic-room-blinds.webp";
+import shadeGuide from "../assets/img/clinic-shade-guide.webp";
+import roomTerracotta from "../assets/img/clinic-room-terracotta.webp";
+import facade from "../assets/img/clinic-facade.webp";
+
+const photos = [
+  { src: roomLight, cls: "wide", alt: "Світлий стоматологічний кабінет, пацієнтка в кріслі під час прийому", sizes: "(min-width: 900px) 1280px, 86vw", widths: [480, 800, 1280, 1600, 1920] },
+  { src: doctorWork, cls: "tall", alt: "Лікар у масці лікує зуби пацієнтки в кріслі", sizes: "(min-width: 900px) 40vw, 76vw", widths: [480, 800, 1017] },
+  { src: roomBlinds, cls: "side-a", alt: "Стоматологічний кабінет із жалюзі на вікнах", sizes: "(min-width: 900px) 28vw, 76vw", widths: [480, 800, 1178] },
+  { src: shadeGuide, cls: "side-b", alt: "Лікар у рукавичках тримає шкалу відтінків зубів", sizes: "(min-width: 900px) 28vw, 76vw", widths: [480, 800, 1178] },
+  { src: roomTerracotta, cls: "row-a", alt: "Кабінет із теракотовою плиткою і стоматологічним кріслом", sizes: "(min-width: 900px) 56vw, 76vw", widths: [480, 800, 1200, 1600] },
+  { src: facade, cls: "row-b", alt: "Будівля клініки з вивіскою JUST DENT", sizes: "(min-width: 900px) 40vw, 76vw", widths: [480, 800, 1178] },
+];
+---
+<section id="clinic" class="clinic section" data-rec="UX-R-7,SPD-R006,SEO-R010" aria-labelledby="clinic-title">
+  <div class="container">
+    <div class="section__head clinic__head">
+      <h2 id="clinic-title">Клініка</h2>
+      <p class="section__lead">Кабінети, обладнання і лікарі Just Dent на власних фото клініки.</p>
+    </div>
+  </div>
+  <div class="container clinic__frame">
+    <ul class="gallery" tabindex="0" aria-label="Фото клініки, гортайте вбік">
+      {photos.map((p) => (
+        <li class:list={["gallery__item", `gallery__item--${p.cls}`]}>
+          <Picture src={p.src} formats={["avif", "webp"]} fallbackFormat="webp" widths={p.widths} sizes={p.sizes} alt={p.alt} loading="lazy" decoding="async" />
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<style>
+  .clinic { padding-bottom: 0; }
+  .gallery {
+    display: flex; gap: var(--space-2); overflow-x: auto; overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory; scroll-padding-inline: var(--gutter);
+    margin-inline: calc(var(--gutter) * -1); padding-inline: var(--gutter); padding-bottom: var(--space-1);
+    scrollbar-width: thin;
+  }
+  .gallery__item { flex: 0 0 76%; scroll-snap-align: start; }
+  .gallery__item--wide { flex-basis: 88%; }
+  .gallery__item :global(picture), .gallery__item :global(img) { width: 100%; height: 100%; }
+  .gallery__item :global(img) { height: 300px; object-fit: cover; }
+
+  @media (min-width: 900px) {
+    .gallery {
+      display: grid; overflow: visible; margin: 0; padding: 0;
+      grid-template-columns: repeat(12, minmax(0, 1fr)); gap: var(--grid-gap);
+      grid-template-areas:
+        "w w w w w w w w w w w w"
+        "t t t t t a a a b b b b"
+        "r r r r r r r f f f f f";
+    }
+    .gallery__item--wide { grid-area: w; }
+    .gallery__item--tall { grid-area: t; }
+    .gallery__item--side-a { grid-area: a; }
+    .gallery__item--side-b { grid-area: b; }
+    .gallery__item--row-a { grid-area: r; }
+    .gallery__item--row-b { grid-area: f; }
+    .gallery__item :global(img) { height: 100%; min-height: 0; }
+    .gallery__item--wide :global(img) { aspect-ratio: 16 / 7.5; height: auto; object-position: 50% 55%; }
+    .gallery__item--tall :global(img) { aspect-ratio: 4 / 5; height: auto; object-position: 50% 30%; }
+    .gallery__item--side-a :global(img), .gallery__item--side-b :global(img) { position: absolute; inset: 0; }
+    .gallery__item--side-a, .gallery__item--side-b { position: relative; }
+    .gallery__item--side-a :global(picture), .gallery__item--side-b :global(picture) { position: absolute; inset: 0; }
+    .gallery__item--row-a :global(img) { aspect-ratio: 16 / 9; height: auto; }
+    .gallery__item--row-b :global(img) { position: absolute; inset: 0; object-position: 50% 40%; }
+    .gallery__item--row-b, .gallery__item--row-b :global(picture) { position: relative; }
+    .gallery__item--row-b :global(picture) { position: absolute; inset: 0; }
+  }
+</style>

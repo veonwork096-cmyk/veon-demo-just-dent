@@ -1,0 +1,107 @@
+---
+// Week schedule (the day band unfolded into Mon–Sun) + short statements + clinic's own figures, labelled.
+const days = [
+  { short: "Пн", full: "Понеділок", open: true },
+  { short: "Вт", full: "Вівторок", open: true },
+  { short: "Ср", full: "Середа", open: true },
+  { short: "Чт", full: "Четвер", open: true },
+  { short: "Пт", full: "П’ятниця", open: true },
+  { short: "Сб", full: "Субота", open: true },
+  { short: "Нд", full: "Неділя", open: false },
+];
+const points = [
+  { title: "До 21:00 щодня, крім неділі", text: "Можна прийти після роботи чи школи, у суботу теж." },
+  { title: "Паркування", text: "Є місця, щоб залишити авто." },
+  { title: "Гнучкі варіанти оплати", text: "Деталі підкажуть, коли будете записуватися." },
+  { title: "Дві клініки", text: "В Ужгороді та в с. Річка в Міжгір’ї." },
+];
+---
+<section id="convenience" class="convenience section" data-rec="UX-R-9" aria-labelledby="convenience-title">
+  <div class="container">
+    <div class="section__head">
+      <h2 id="convenience-title">Зручно прийти</h2>
+    </div>
+    <div class="convenience__grid">
+      <div class="week-wrap">
+        <ul class="week" data-reveal aria-label="Графік клініки в Ужгороді">
+          {days.map((d, i) => (
+            <li class:list={["week__row", { "week__row--off": !d.open }]} style={`--i:${i}`}>
+              <span class="week__day" aria-hidden="true">{d.short}</span>
+              <span class="week__track" aria-hidden="true">
+                {d.open && <><span class="week__day-part"></span><span class="week__evening"></span></>}
+              </span>
+              <span class="week__hours num" aria-hidden="true">{d.open ? "9–21" : "вихідний"}</span>
+              <span class="visually-hidden">{d.full}: {d.open ? "з 9:00 до 21:00" : "вихідний"}</span>
+            </li>
+          ))}
+        </ul>
+        <p class="week__caption">Графік клініки в Ужгороді, вул. Заньковецької, 38. Для с. Річка графік уточнюйте за телефоном.</p>
+      </div>
+      <ul class="points">
+        {points.map((p) => (
+          <li><h3>{p.title}</h3><p>{p.text}</p></li>
+        ))}
+      </ul>
+    </div>
+    <div class="trust">
+      <p class="trust__item">
+        <span class="trust__main">6 профільних лікарів із досвідом понад 5 років. 7 років роботи, понад 7000 пацієнтів.</span>
+        <span class="trust__src">За даними клініки</span>
+      </p>
+      <p class="trust__item">
+        <span class="trust__main"><span class="num">4,8 з 5</span> за 37 відгуками на top20.ua.</span>
+        <span class="trust__src">Перевірено в листопаді 2026</span>
+      </p>
+    </div>
+  </div>
+</section>
+
+<style>
+  .convenience { background: var(--color-surface); }
+  .convenience__grid { display: grid; gap: var(--space-5); }
+  .week-wrap { display: grid; gap: var(--space-3); align-content: start; }
+  .week { display: grid; gap: var(--space-2); }
+  .week__row { display: grid; grid-template-columns: 2.5rem minmax(0, 1fr) 4.75rem; align-items: center; gap: var(--space-2); }
+  .week__day { font-family: var(--font-display); font-weight: 600; }
+  .week__track {
+    display: grid; grid-template-columns: repeat(12, minmax(0, 1fr));
+    height: 20px; border-radius: var(--radius); overflow: hidden; background: var(--color-border);
+    transform-origin: left center;
+  }
+  .week__day-part { grid-column: 1 / span 9; background: var(--color-primary); }
+  .week__evening { grid-column: 10 / span 3; background: var(--color-accent); }
+  .week__row--off .week__track { height: 0; border-radius: 0; overflow: visible; background: none; border-top: 2px dashed var(--color-text-muted); }
+  .week__row--off .week__day, .week__row--off .week__hours { color: var(--color-text-muted); }
+  .week__hours { font-size: var(--fs-small); font-weight: 600; text-align: right; }
+  .week__caption { font-size: var(--fs-small); color: var(--color-text-muted); max-width: 34rem; }
+
+  /* Motion 3: the bars grow one after another when the week enters the screen. */
+  @media (prefers-reduced-motion: no-preference) {
+    :global(.js) .week:not(.is-visible) .week__track { transform: scaleX(0); }
+    .week__track { transition: transform 600ms var(--ease-out); transition-delay: calc(var(--i) * 60ms); }
+    @media (max-width: 767.98px) { .week__track { transition-duration: 400ms; transition-delay: 0ms; } }
+  }
+
+  .points { display: grid; gap: var(--space-3); align-content: start; }
+  .points li { display: grid; gap: .25rem; padding-top: var(--space-2); border-top: 1px solid var(--color-border); }
+  .points li:first-child { border-top-color: var(--color-text-muted); }
+  .points li:first-child h3 { color: var(--color-accent-text); }
+  .points p { color: var(--color-text-muted); }
+
+  .trust {
+    display: grid; gap: var(--space-3);
+    margin-top: var(--space-5); padding-top: var(--space-3); border-top: 1px solid var(--color-text-muted);
+  }
+  .trust__item { display: grid; gap: .25rem; }
+  .trust__main { font-family: var(--font-display); font-size: var(--fs-h3); font-weight: 600; line-height: 1.3; letter-spacing: -0.01em; }
+  .trust__src { font-size: var(--fs-small); color: var(--color-text-muted); }
+
+  @media (min-width: 900px) {
+    .convenience__grid { grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--grid-gap); }
+    .week-wrap { grid-column: 1 / span 7; }
+    .points { grid-column: 9 / -1; }
+    .trust { grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--grid-gap); }
+    .trust__item:first-child { grid-column: 1 / span 7; }
+    .trust__item:last-child { grid-column: 9 / -1; }
+  }
+</style>

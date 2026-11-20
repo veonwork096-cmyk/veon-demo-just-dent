@@ -1,0 +1,59 @@
+---
+import Base from "../layouts/Base.astro";
+import Header from "../components/Header.astro";
+import Hero from "../components/Hero.astro";
+import Services from "../components/Services.astro";
+import FirstVisit from "../components/FirstVisit.astro";
+import Convenience from "../components/Convenience.astro";
+import Clinic from "../components/Clinic.astro";
+import Locations from "../components/Locations.astro";
+import Footer from "../components/Footer.astro";
+import ChannelSheet from "../components/ChannelSheet.astro";
+import MobileBar from "../components/MobileBar.astro";
+import { phones, email, facebook, instagramUrl } from "../data/site";
+
+const title = "Стоматологія в Ужгороді та Міжгір’ї — Just Dent, до 21:00";
+const description = "Сімейна стоматологія Just Dent: дві клініки — Ужгород і с. Річка. Пн–Сб 9:00–21:00, консультація 300 грн. Лікування, гігієна, дитяча стоматологія.";
+
+// schema.org Dentist for both clinics (SEO-R004). No rating, no FAQ, no url to the current site.
+// Hours only for Uzhhorod; the schedule of Richka is not confirmed.
+const sameAs = [instagramUrl, facebook.href];
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Dentist",
+      "@id": "#uzhhorod",
+      name: "Just Dent — стоматологія в Ужгороді",
+      telephone: [phones.main.full.replace(/\s/g, ""), phones.second.full.replace(/\s/g, "")],
+      email: email.label,
+      address: { "@type": "PostalAddress", streetAddress: "вул. Заньковецької, 38", addressLocality: "Ужгород", addressRegion: "Закарпатська область", addressCountry: "UA" },
+      openingHoursSpecification: [{ "@type": "OpeningHoursSpecification", dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"], opens: "09:00", closes: "21:00" }],
+      priceRange: "від 300 грн",
+      sameAs,
+    },
+    {
+      "@type": "Dentist",
+      "@id": "#richka",
+      name: "Just Dent в Міжгір’ї",
+      telephone: phones.main.full.replace(/\s/g, ""),
+      email: email.label,
+      address: { "@type": "PostalAddress", streetAddress: "буд. 137-а", addressLocality: "с. Річка", addressRegion: "Закарпатська область, Хустський (Міжгірський) р-н", addressCountry: "UA" },
+      sameAs,
+    },
+  ],
+};
+---
+<Base lang="uk" title={title} description={description}>
+  <script slot="head" type="application/ld+json" data-rec="SEO-R004" set:html={JSON.stringify(jsonLd)} />
+  <Header slot="header" />
+  <Hero />
+  <Services />
+  <FirstVisit />
+  <Convenience />
+  <Clinic />
+  <Locations />
+  <Footer slot="footer" />
+  <ChannelSheet />
+  <MobileBar />
+</Base>

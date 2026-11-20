@@ -1,0 +1,101 @@
+---
+// «Меню» of situations: each group is a heading on the left and rows of services with an undisputed «від» price.
+import FutureLink from "./FutureLink.astro";
+import Icon from "./Icon.astro";
+import { serviceGroups } from "../data/site";
+---
+<section id="services" class="services section" data-rec="UX-R-4" aria-labelledby="services-title">
+  <div class="container">
+    <div class="section__head">
+      <h2 id="services-title">Що вас турбує?</h2>
+      <p class="section__lead">Оберіть свою ситуацію: ціни «від» узяті з прайсу клініки, точну вартість лікар назве після огляду.</p>
+    </div>
+    <div class="services__groups">
+      {serviceGroups.map((g) => (
+        <div class="svc-group" id={`services-${g.id}`}>
+          <div class="svc-group__head">
+            <h3>{g.title}</h3>
+            <p>{g.lead}</p>
+          </div>
+          <ul class="svc-group__rows">
+            {g.rows.map((r) => (
+              <li class="svc">
+                <div class="svc__info">
+                  <strong class="svc__name">{r.name}</strong>
+                  <p class="svc__what">{r.what}</p>
+                </div>
+                <p class="svc__price">
+                  <span class="svc__amount num">{r.from && <span class="svc__from">від </span>}{r.price}</span>
+                  {r.priceNote && <span class="svc__note">{r.priceNote}</span>}
+                  {r.extra && <span class="svc__note">{r.extra}</span>}
+                </p>
+                <div class="svc__actions">
+                  <button class="svc__book" type="button" popovertarget="channels"><span>Записатися</span><Icon name="arrow" class="svc__arrow" /></button>
+                  <FutureLink class="svc__more">Детальніше</FutureLink>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .services__groups { display: grid; gap: var(--space-5); }
+  .svc-group { display: grid; gap: var(--space-3); }
+  .svc-group__head { display: grid; gap: var(--space-1); align-content: start; }
+  .svc-group__head h3 { font-size: var(--fs-h2); font-weight: 700; letter-spacing: var(--track-display); line-height: 1.1; }
+  .svc-group__head p { color: var(--color-text-muted); }
+  .svc-group__rows { border-top: 2px solid var(--color-text); }
+  .svc {
+    display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: var(--space-1) var(--space-2);
+    padding: var(--space-3) var(--space-2);
+    border-bottom: 1px solid var(--color-border);
+    transition: background-color var(--dur-fast) var(--ease-out);
+  }
+  .svc__info { display: contents; }
+  .svc__name { grid-column: 1; font-family: var(--font-display); font-size: var(--fs-h3); font-weight: 600; line-height: 1.25; letter-spacing: -0.01em; }
+  .svc__what { grid-column: 1 / -1; grid-row: 2; color: var(--color-text-muted); max-width: 36rem; }
+  .svc__price { grid-column: 2; grid-row: 1; display: grid; justify-items: end; text-align: right; }
+  .svc__amount {
+    font-size: var(--fs-h3); font-weight: 700; white-space: nowrap; line-height: 1.25;
+    transition: transform var(--dur-fast) var(--ease-out);
+  }
+  .svc__from { font-family: var(--font-body); font-size: var(--fs-small); font-weight: 400; color: var(--color-text-muted); }
+  .svc__note { font-size: var(--fs-small); color: var(--color-text-muted); line-height: 1.35; }
+  .svc__actions { grid-column: 1 / -1; display: flex; align-items: center; flex-wrap: wrap; gap: 0 var(--space-3); }
+  .svc__book {
+    display: inline-flex; align-items: center; gap: var(--space-1); min-height: var(--tap); padding: 0;
+    border: 0; background: none; color: var(--color-primary); cursor: pointer;
+    font: 600 var(--fs-small) / 1 var(--font-body); white-space: nowrap;
+    text-decoration: underline; text-decoration-color: transparent; text-decoration-thickness: 1px; text-underline-offset: .3em;
+    transition: text-decoration-color var(--dur-fast) var(--ease-out), color var(--dur-fast) var(--ease-out);
+  }
+  .svc__book:hover { color: var(--color-primary-hover); text-decoration-color: currentColor; }
+  .svc__book :global(.svc__arrow) { width: 18px; height: 18px; transition: transform var(--dur-fast) var(--ease-out); }
+  .svc__actions :global(.svc__more) { font-size: var(--fs-small); color: var(--color-text-muted); text-decoration-color: var(--color-border); }
+
+  /* Motion 5: the row answers hover and focus; the price moves 4 px. */
+  .svc:hover, .svc:focus-within { background: var(--color-surface); }
+  @media (hover: hover) and (prefers-reduced-motion: no-preference) {
+    .svc:hover .svc__amount, .svc:focus-within .svc__amount { transform: translateX(-4px); }
+    .svc:hover .svc__book :global(.svc__arrow), .svc__book:focus-visible :global(.svc__arrow) { transform: translateX(4px); }
+  }
+
+  @media (max-width: 899.98px) {
+    .svc { padding-inline: 0; }
+    .svc:hover, .svc:focus-within { background: none; }
+  }
+
+  @media (min-width: 900px) {
+    .svc-group { grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--grid-gap); align-items: start; }
+    .svc-group__head { grid-column: 1 / span 4; position: sticky; top: calc(var(--header-h) + var(--space-3)); padding-right: var(--space-3); }
+    .svc-group__rows { grid-column: 5 / -1; }
+    .svc { grid-template-columns: minmax(0, 1fr) minmax(11rem, auto); padding-block: var(--space-3); }
+    .svc__what { grid-column: 1; grid-row: 2; }
+    .svc__price { grid-row: 1 / span 2; align-self: start; }
+    .svc__amount { font-size: var(--fs-h2); line-height: 1.1; }
+  }
+</style>

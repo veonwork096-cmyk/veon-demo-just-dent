@@ -1,0 +1,94 @@
+---
+// The day band 9:00 → 21:00 with the evening segment 18–21 (concept signature).
+// variant: hero (on primary) | line (footer, on light) | dashed (hours unknown).
+interface Props { variant?: "hero" | "line" | "dashed"; label?: string; }
+const { variant = "hero", label } = Astro.props;
+const hours = Array.from({ length: 13 }, (_, i) => 9 + i);
+---
+{variant === "hero" && (
+  <div class="daybar daybar--hero" role="img" aria-label="Прийом з понеділка по суботу з 9:00 до 21:00, вечірні години з 18:00 до 21:00">
+    <div class="daybar__head" aria-hidden="true">
+      <span class="daybar__days">Пн–Сб</span>
+      <span class="daybar__until num">до 21:00</span>
+    </div>
+    <ol class="daybar__scale num" aria-hidden="true">
+      {hours.map((h) => <li class:list={{ major: h % 3 === 0 }}><span data-h={h}></span></li>)}
+    </ol>
+    <div class="daybar__track" aria-hidden="true">
+      <span class="daybar__day"></span>
+      <span class="daybar__evening"></span>
+    </div>
+  </div>
+)}
+{variant !== "hero" && (
+  <div class:list={["daybar", `daybar--${variant}`]}>
+    <div class="daybar__track" aria-hidden="true">
+      <span class="daybar__day"></span>
+      <span class="daybar__evening"></span>
+    </div>
+    {label && <p class="daybar__caption">{label}</p>}
+  </div>
+)}
+<style>
+  .daybar__scale span::before { content: attr(data-h); }
+  .daybar__track {
+    display: grid; grid-template-columns: repeat(12, minmax(0, 1fr));
+    height: 14px; border-radius: var(--radius); overflow: hidden;
+  }
+  .daybar__day { grid-column: 1 / span 9; }
+  .daybar__evening { grid-column: 10 / span 3; }
+
+  /* Hero: on the primary field */
+  .daybar--hero { display: grid; gap: var(--space-2); color: var(--color-on-primary); }
+  .daybar--hero .daybar__track { height: clamp(14px, 1rem + .5vw, 22px); background: var(--color-line-on-primary); }
+  .daybar--hero .daybar__day { background: var(--color-day-on-primary); }
+  .daybar--hero .daybar__evening { background: var(--color-accent); }
+  .daybar__head {
+    display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); align-items: end;
+    font-family: var(--font-display); line-height: 1;
+  }
+  .daybar__days { grid-column: 1 / span 6; font-size: var(--fs-h3); font-weight: 600; color: var(--color-muted-on-primary); padding-bottom: .35em; }
+  .daybar__until {
+    grid-column: 7 / -1; justify-self: end;
+    font-size: clamp(1.75rem, 1rem + 4vw, 3.5rem); font-weight: 800; letter-spacing: var(--track-display); white-space: nowrap;
+  }
+  .daybar__scale {
+    display: flex; justify-content: space-between;
+    font-size: var(--fs-small); color: var(--color-muted-on-primary);
+    padding-inline: 0; margin-bottom: calc(var(--space-1) * -1);
+  }
+  .daybar__scale li { width: 0; display: flex; justify-content: center; position: relative; padding-bottom: 12px; }
+  .daybar__scale li::after {
+    content: ""; position: absolute; bottom: 0; left: 0; width: 1px; height: 6px;
+    background: var(--color-line-on-primary);
+  }
+  .daybar__scale li.major::after { height: 10px; background: var(--color-muted-on-primary); }
+  .daybar__scale li:first-child { justify-content: flex-start; }
+  .daybar__scale li:last-child { justify-content: flex-end; }
+  @media (max-width: 767.98px) {
+    .daybar__scale li:not(.major):not(:first-child):not(:last-child) span { visibility: hidden; }
+  }
+
+  /* Line and dashed: on light surfaces */
+  .daybar--line, .daybar--dashed { display: grid; gap: var(--space-1); align-content: start; }
+  .daybar--line .daybar__track, .daybar--dashed .daybar__track { height: 8px; }
+  .daybar--line .daybar__track { background: var(--color-border); }
+  .daybar--line .daybar__day { background: var(--color-primary); }
+  .daybar--line .daybar__evening { background: var(--color-accent); }
+  .daybar--dashed .daybar__track { overflow: visible; border-radius: 0; height: 8px; border-bottom: 2px dashed var(--color-text-muted); background: none; }
+  .daybar--dashed .daybar__day, .daybar--dashed .daybar__evening { background: none; }
+  .daybar__caption { font-size: var(--fs-small); color: var(--color-text-muted); }
+
+  /* Motion 1: the band fills 9 → 21, then the evening and «до 21:00» appear. CSS only, no JS needed. */
+  @media (prefers-reduced-motion: no-preference) {
+    .daybar--hero .daybar__track { transform-origin: left center; animation: band-fill var(--dur-band) var(--ease-out) 150ms both; }
+    .daybar--hero .daybar__evening { animation: band-fade 250ms var(--ease-out) calc(var(--dur-band) + 150ms) both; }
+    .daybar--hero .daybar__until { animation: band-fade 250ms var(--ease-out) calc(var(--dur-band) + 200ms) both; }
+    @media (max-width: 767.98px) {
+      .daybar--hero .daybar__track { animation-duration: 500ms; }
+      .daybar--hero .daybar__evening, .daybar--hero .daybar__until { animation-delay: 650ms; }
+    }
+  }
+  @keyframes band-fill { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+  @keyframes band-fade { from { opacity: 0; } to { opacity: 1; } }
+</style>

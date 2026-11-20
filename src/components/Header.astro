@@ -1,0 +1,131 @@
+---
+import Logo from "./Logo.astro";
+import FutureLink from "./FutureLink.astro";
+import Icon from "./Icon.astro";
+import { phones } from "../data/site";
+const anchors = [
+  { href: "#services", label: "Послуги" },
+  { href: "#first-visit", label: "Перший візит" },
+  { href: "#clinic", label: "Клініка" },
+  { href: "#locations", label: "Контакти" },
+];
+---
+<header class="site-header">
+  <div class="container site-header__inner">
+    <Logo />
+    <nav class="site-nav" aria-label="Основна навігація" data-rec="UX-R-5">
+      <ul>
+        {anchors.map((a) => <li><a href={a.href}>{a.label}</a></li>)}
+        <li><FutureLink>Ціни</FutureLink></li>
+        <li><FutureLink>Лікарі</FutureLink></li>
+      </ul>
+    </nav>
+    <div class="site-header__actions">
+      <a class="site-header__phone num" href={phones.main.href} data-rec="UX-R-2">{phones.main.label}</a>
+      <button class="btn btn--sm site-header__book" type="button" popovertarget="channels" data-rec="UX-R-2">Записатися</button>
+      <a class="site-header__call" href={phones.main.href} aria-label={`Подзвонити ${phones.main.label}`} data-rec="UX-R-6"><Icon name="phone" /></a>
+      <button class="site-header__menu" type="button" popovertarget="menu" aria-label="Відкрити меню">
+        <Icon name="menu" /><span aria-hidden="true">Меню</span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<div id="menu" class="menu-sheet" popover role="dialog" aria-label="Меню">
+  <div class="container menu-sheet__inner">
+    <div class="menu-sheet__top">
+      <span class="menu-sheet__title">Меню</span>
+      <button class="icon-btn" type="button" popovertarget="menu" popovertargetaction="hide" aria-label="Закрити меню"><Icon name="close" /></button>
+    </div>
+    <nav aria-label="Меню сторінки">
+      <ul class="menu-sheet__list">
+        {anchors.map((a) => <li><a href={a.href} data-menu-link>{a.label}</a></li>)}
+        <li><FutureLink>Ціни</FutureLink></li>
+        <li><FutureLink>Лікарі</FutureLink></li>
+      </ul>
+    </nav>
+    <div class="menu-sheet__actions">
+      <a class="btn" href={phones.main.href}><Icon name="phone" />Подзвонити</a>
+      <button class="btn btn--ghost" type="button" popovertarget="channels"><Icon name="message" />Написати</button>
+    </div>
+  </div>
+</div>
+
+<style>
+  .site-header {
+    position: sticky; top: 0; z-index: 40;
+    background: var(--color-bg); border-bottom: 1px solid var(--color-border);
+  }
+  .site-header__inner { display: flex; align-items: center; gap: var(--space-3); height: var(--header-h); }
+  .site-nav { margin-inline: auto; }
+  .site-nav ul { display: flex; align-items: center; gap: clamp(1rem, .2rem + 1.4vw, 1.75rem); }
+  .site-nav a {
+    display: inline-flex; align-items: center; min-height: var(--tap);
+    font-size: var(--fs-small); font-weight: 400; text-decoration: none;
+    text-decoration-line: underline; text-decoration-color: transparent;
+    text-decoration-thickness: 2px; text-underline-offset: .45em;
+    transition: text-decoration-color var(--dur-fast) var(--ease-out), color var(--dur-fast) var(--ease-out);
+  }
+  .site-nav a:hover { color: var(--color-primary); text-decoration-color: var(--color-primary); }
+  .site-nav :global(.future-link) { font-size: var(--fs-small); }
+  .site-header__actions { display: flex; align-items: center; gap: var(--space-2); }
+  .site-header__phone {
+    display: inline-flex; align-items: center; min-height: var(--tap);
+    font-weight: 700; font-size: var(--fs-body); text-decoration: none; white-space: nowrap;
+    transition: color var(--dur-fast) var(--ease-out);
+  }
+  .site-header__phone:hover { color: var(--color-primary); }
+  .site-header__call {
+    display: none; place-items: center; width: var(--tap); height: var(--tap); border-radius: 50%;
+    background: var(--color-primary); color: var(--color-on-primary);
+    transition: background-color var(--dur-fast) var(--ease-out), transform var(--dur-fast) var(--ease-out);
+  }
+  .site-header__call:hover { background: var(--color-primary-hover); }
+  /* Once the bottom bar is shown it carries the filled call button; the header one turns to outline. */
+  :global(.bar-shown) .site-header__call { background: var(--color-bg); color: var(--color-primary); box-shadow: inset 0 0 0 2px var(--color-primary); }
+  :global(.bar-shown) .site-header__call:hover { background: var(--color-surface); }
+  .site-header__call:active { transform: scale(.96); }
+  .site-header__call :global(svg) { width: 22px; height: 22px; }
+  .site-header__menu {
+    display: none; align-items: center; gap: .4rem; min-height: var(--tap); padding: 0 .9rem;
+    border: 1px solid var(--color-border); border-radius: var(--radius); background: var(--color-bg); color: var(--color-text);
+    font: 600 var(--fs-small) / 1 var(--font-body); cursor: pointer;
+    transition: border-color var(--dur-fast) var(--ease-out), background-color var(--dur-fast) var(--ease-out);
+  }
+  .site-header__menu:hover { border-color: var(--color-primary); background: var(--color-surface); }
+  .site-header__menu :global(svg) { width: 20px; height: 20px; }
+
+  @media (max-width: 1159.98px) {
+    .site-nav, .site-header__book { display: none; }
+    .site-header__menu { display: inline-flex; }
+    .site-header__actions { margin-left: auto; }
+  }
+  @media (max-width: 767.98px) {
+    .site-header__phone { display: none; }
+    .site-header__call { display: grid; }
+  }
+
+  /* Full-screen menu sheet (popover: opens, closes on Esc and returns focus without scripts). */
+  .menu-sheet {
+    position: fixed; inset: 0; width: 100%; height: 100dvh; max-width: none; max-height: none;
+    margin: 0; padding: 0; border: 0; background: var(--color-bg); color: var(--color-text);
+    overflow-y: auto;
+  }
+  .menu-sheet__inner { display: flex; flex-direction: column; min-height: 100%; padding-bottom: var(--space-4); }
+  .menu-sheet__top { display: flex; align-items: center; justify-content: space-between; height: var(--header-h); }
+  .menu-sheet__title { font-family: var(--font-display); font-weight: 600; color: var(--color-text-muted); }
+  .menu-sheet__list { display: grid; gap: var(--space-1); padding-block: var(--space-3) var(--space-4); }
+  .menu-sheet__list a, .menu-sheet__list :global(.future-link) {
+    display: inline-flex; align-items: center; min-height: 56px;
+    font-family: var(--font-display); font-size: 2rem; font-weight: 700; letter-spacing: var(--track-display);
+    text-decoration: none;
+  }
+  .menu-sheet__list :global(.future-link) { color: var(--color-text-muted); text-decoration: underline dotted; text-decoration-thickness: 2px; }
+  .menu-sheet__list a:hover { color: var(--color-primary); }
+  .menu-sheet__actions { display: grid; gap: var(--space-2); margin-top: auto; }
+  .menu-sheet__actions .btn { width: 100%; min-height: 56px; }
+  @media (prefers-reduced-motion: no-preference) {
+    .menu-sheet:popover-open { animation: sheet-in var(--dur-ui) var(--ease-out); }
+  }
+  @keyframes sheet-in { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+</style>

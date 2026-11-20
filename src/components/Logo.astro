@@ -1,0 +1,15 @@
+---
+import { Image } from "astro:assets";
+import logo from "../assets/img/logo.png";
+interface Props { size?: "header" | "footer"; }
+const { size = "header" } = Astro.props;
+const h = size === "header" ? 44 : 52;
+---
+<a href="#top" class="logo" data-rec="UX-R-6">
+  <Image src={logo} alt="Just Dent — на початок сторінки" height={h} width={Math.round((h * 889) / 536)} densities={[1, 2]} format="webp" loading="eager" />
+</a>
+<style>
+  .logo { display: inline-flex; align-items: center; min-height: var(--tap); border-radius: var(--radius-panel); }
+  .logo img { height: 44px; width: auto; }
+  @media (max-width: 767.98px) { .logo img { height: 36px; } }
+</style>

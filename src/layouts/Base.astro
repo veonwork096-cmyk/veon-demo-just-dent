@@ -1,0 +1,35 @@
+---
+import "../styles/tokens.css";
+import "../styles/global.css";
+import geologicaCyr from "../assets/fonts/geologica-cyrillic-wght-normal.woff2?url";
+
+interface Props { lang: string; title: string; description: string; canonical?: string; }
+const { lang, title, description, canonical } = Astro.props;
+---
+<!doctype html>
+<html lang={lang}>
+  <head>
+    <meta charset="utf-8" />
+    <script is:inline>document.documentElement.classList.add("js")</script>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title data-rec="SEO-R002">{title}</title>
+    <meta name="description" content={description} data-rec="SEO-R002" />
+    {canonical && <link rel="canonical" href={canonical} />}
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:locale" content="uk_UA" />
+    <meta name="theme-color" content="#1656B8" />
+    <meta name="robots" content="noindex" />
+    <link rel="preload" href={geologicaCyr} as="font" type="font/woff2" crossorigin data-rec="SPD-R004" />
+    <slot name="head" />
+    <style is:global>html, body { overflow-x: clip; }</style>
+  </head>
+  <body id="top">
+    <a class="skip-link" href="#main">До змісту</a>
+    <slot name="header" />
+    <main id="main"><slot /></main>
+    <slot name="footer" />
+    <script src="../scripts/reveal.ts"></script>
+    <script src="../scripts/ui.ts"></script>
+  </body>
+</html>

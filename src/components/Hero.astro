@@ -1,0 +1,98 @@
+---
+import { Picture } from "astro:assets";
+import DayBar from "./DayBar.astro";
+import Icon from "./Icon.astro";
+import { phones } from "../data/site";
+import doctors from "../assets/img/hero-doctors.webp";
+---
+<section id="hero" class="hero" data-rec="UX-R-1,UX-R-8,GA-R003,MA-R005,MA-R006" aria-labelledby="hero-title">
+  <div class="container hero__top">
+    <h1 id="hero-title" class="hero__title"><span>Сімейна стоматологія</span> <span>в Ужгороді та Міжгір’ї</span></h1>
+    <p class="hero__sub">Приймаємо з понеділка по суботу до&nbsp;21:00&nbsp;— можна прийти після роботи.</p>
+  </div>
+  <div class="hero__band on-primary">
+    <div class="container hero__grid">
+      <div class="hero__main">
+        <DayBar variant="hero" />
+        <div class="hero__actions" data-rec="UX-R-2">
+          <a class="btn btn--on-primary hero__call" href={phones.main.href}>
+            <Icon name="phone" /><span class="nowrap">Подзвонити <span class="num hero__call-num">{phones.main.label}</span></span>
+          </a>
+          <button class="btn btn--ghost-on-primary" type="button" popovertarget="channels"><Icon name="message" />Написати</button>
+        </div>
+        <ul class="hero__facts" aria-label="Коротко про клініку">
+          <li>Паркування</li>
+          <li>Консультація <span class="num">300 грн</span></li>
+          <li>вул. Заньковецької, 38 і с. Річка</li>
+        </ul>
+      </div>
+      <figure class="hero__photo" data-rec="SPD-R002,SEO-R010">
+        <Picture
+          src={doctors}
+          formats={["avif", "webp"]} fallbackFormat="webp"
+          widths={[480, 800, 1200]}
+          sizes="(min-width: 768px) 31vw, 100vw"
+          alt="Двоє лікарів Just Dent у чорній формі в стоматологічному кабінеті"
+          loading="eager"
+          fetchpriority="high"
+          decoding="async"
+        />
+      </figure>
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero__top { padding-block: var(--space-4) var(--space-3); }
+  .hero__title {
+    font-size: var(--fs-h1); font-weight: 700; line-height: 1.02;
+    max-width: 18ch; text-wrap: balance;
+  }
+  .hero__sub { margin-top: var(--space-2); max-width: 34rem; font-size: var(--fs-lead); color: var(--color-text-muted); }
+
+  .hero__band { background: var(--color-primary); color: var(--color-on-primary); }
+  .hero__grid { display: grid; gap: var(--space-3); padding-top: var(--space-3); }
+  .hero__main { display: grid; gap: var(--space-3); min-width: 0; }
+  .hero__actions { display: grid; gap: var(--space-1); }
+  .hero__actions .btn { width: 100%; }
+  @media (max-width: 1023.98px) { .hero__actions .btn { min-height: 56px; } }
+  .hero__call-num { display: none; }
+  .nowrap { white-space: nowrap; }
+  .hero__facts { display: flex; flex-wrap: wrap; gap: .25rem var(--space-2); font-size: var(--fs-small); color: var(--color-muted-on-primary); }
+
+  .hero__photo { margin: 0 calc(var(--gutter) * -1); }
+  .hero__photo :global(img) { width: 100%; height: 260px; object-fit: cover; object-position: 50% 22%; }
+
+  @media (min-width: 560px) {
+    .hero__actions { grid-template-columns: max-content max-content; gap: var(--space-2); }
+    .hero__actions .btn { width: auto; }
+    .hero__call-num { display: inline; }
+    .hero__facts li + li { padding-left: var(--space-2); border-left: 1px solid var(--color-line-on-primary); }
+    .hero__photo :global(img) { height: 380px; }
+  }
+
+  @media (min-width: 768px) {
+    .hero__top { padding-block: var(--space-4) var(--space-3); }
+    .hero__title span { display: block; }
+    .hero__title { max-width: none; font-size: clamp(2.375rem, 5.05vw, 4.75rem); text-wrap: balance; }
+    .hero__grid {
+      grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--grid-gap);
+      padding-block: var(--space-3);
+      align-items: end;
+    }
+    .hero__main { grid-column: 1 / span 8; gap: var(--space-4); align-self: start; }
+    .hero__photo {
+      grid-column: 9 / -1; margin: 0;
+      margin-top: calc(var(--hero-rise, 12rem) * -1);
+      position: relative; z-index: 1;
+    }
+    .hero__photo :global(img) { height: auto; aspect-ratio: 4 / 5; object-position: 50% 30%; }
+  }
+  @media (min-width: 1024px) { .hero { --hero-rise: 14rem; } }
+
+  /* Motion 2: the photo opens from the bottom up on wide screens; it is partly visible from the first frame. */
+  @media (min-width: 1024px) and (prefers-reduced-motion: no-preference) {
+    .hero__photo :global(img) { animation: photo-open 800ms var(--ease-out) 100ms both; }
+  }
+  @keyframes photo-open { from { clip-path: inset(40% 0 0 0); } to { clip-path: inset(0 0 0 0); } }
+</style>

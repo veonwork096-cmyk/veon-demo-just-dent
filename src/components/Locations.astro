@@ -1,0 +1,73 @@
+---
+import DayBar from "./DayBar.astro";
+import Icon from "./Icon.astro";
+import { clinics, phones, channels, email, facebook } from "../data/site";
+const allChannels = [
+  ...channels.filter((c) => c.icon !== "phone"),
+  facebook,
+];
+---
+<section id="locations" class="locations section" data-rec="UX-R-12" aria-labelledby="locations-title">
+  <div class="container">
+    <div class="section__head">
+      <h2 id="locations-title">Дві клініки Just Dent</h2>
+    </div>
+    <div class="clinics">
+      {clinics.map((c) => (
+        <article class="clinic-card" aria-labelledby={`clinic-${c.id}`}>
+          <h3 id={`clinic-${c.id}`} class="clinic-card__city">{c.city}</h3>
+          <p class="clinic-card__address">{c.address}<br /><span>{c.region}</span></p>
+          <DayBar variant={c.hoursKnown ? "line" : "dashed"} label={c.hours} />
+          <div class="clinic-card__actions">
+            <a class="btn" href={c.map} target="_blank" rel="noopener"><Icon name="pin" />Прокласти маршрут</a>
+            <a class="btn btn--ghost" href={phones.main.href}><Icon name="phone" />Подзвонити</a>
+          </div>
+        </article>
+      ))}
+    </div>
+    <div class="contacts">
+      <h3 class="contacts__title">Усі способи зв’язку</h3>
+      <ul class="contacts__list" data-rec="SPD-R005">
+        <li><a href={phones.main.href}><Icon name="phone" /><span><span class="num">{phones.main.full}</span><small>телефон, месенджери</small></span></a></li>
+        <li><a href={phones.second.href}><Icon name="phone" /><span><span class="num">{phones.second.full}</span><small>телефон</small></span></a></li>
+        {allChannels.map((c) => (
+          <li><a href={c.href} {...(c.external ? { target: "_blank", rel: "noopener" } : {})}><Icon name={c.icon} /><span>{c.label}<small>{c.icon === "instagram" ? "запис у Direct" : c.note}</small></span></a></li>
+        ))}
+        <li><a href={email.href}><Icon name="mail" /><span>{email.label}<small>e-mail</small></span></a></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<style>
+  .clinics { display: grid; gap: var(--space-3); }
+  .clinic-card {
+    display: grid; gap: var(--space-3); align-content: start;
+    padding: var(--space-4) 0 0; border-top: 2px solid var(--color-text);
+  }
+  .clinic-card__city { font-size: var(--fs-display); font-weight: 700; letter-spacing: var(--track-display); line-height: 1; }
+  .clinic-card__address { font-size: var(--fs-lead); font-weight: 600; }
+  .clinic-card__address span { font-weight: 400; color: var(--color-text-muted); font-size: var(--fs-body); }
+  .clinic-card__actions { display: flex; flex-wrap: wrap; gap: var(--space-1) var(--space-2); }
+
+  .contacts { margin-top: var(--space-5); display: grid; gap: var(--space-3); }
+  .contacts__title { font-size: var(--fs-h3); }
+  .contacts__list { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 15rem), 1fr)); gap: var(--space-1) var(--space-3); }
+  .contacts__list a {
+    display: flex; align-items: center; gap: var(--space-2); min-height: 56px;
+    text-decoration: none; font-weight: 600;
+    border-bottom: 1px solid var(--color-border);
+    transition: color var(--dur-fast) var(--ease-out), border-color var(--dur-fast) var(--ease-out);
+  }
+  .contacts__list a:hover { color: var(--color-primary); border-color: var(--color-primary); }
+  .contacts__list :global(svg) { width: 22px; height: 22px; flex: none; color: var(--color-primary); }
+  .contacts__list a > span { display: grid; line-height: 1.25; }
+  .contacts__list small { font-size: var(--fs-small); font-weight: 400; color: var(--color-text-muted); }
+
+  @media (min-width: 768px) {
+    .clinics { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--grid-gap); column-gap: var(--space-5); }
+  }
+  @media (max-width: 479.98px) {
+    .clinic-card__actions .btn { width: 100%; min-height: 56px; }
+  }
+</style>

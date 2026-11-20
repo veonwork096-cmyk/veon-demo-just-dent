@@ -1,0 +1,77 @@
+---
+import { Picture } from "astro:assets";
+import FutureLink from "./FutureLink.astro";
+import { firstVisit } from "../data/site";
+import device from "../assets/img/first-visit-device.webp";
+---
+<section id="first-visit" class="first-visit on-primary" data-rec="UX-R-7" aria-labelledby="first-visit-title">
+  <div class="container first-visit__grid">
+    <div class="first-visit__main">
+      <h2 id="first-visit-title">Перший візит: скільки коштує почати</h2>
+      <ul class="figures">
+        {firstVisit.map((f, i) => (
+          <li class:list={["figure", { "figure--lead": i === 0 }]}>
+            <span class:list={["figure__from", { "figure__from--empty": !f.from }]} aria-hidden={f.from ? undefined : "true"}>{f.from ? "від" : " "}</span>
+            <span class="figure__value num">{f.value}<span class="figure__unit">{f.unit}</span></span>
+            <span class="figure__label">{f.label}</span>
+          </li>
+        ))}
+      </ul>
+      <p class="first-visit__note">План і вартість лікування лікар складе після огляду.</p>
+      <div class="first-visit__actions">
+        <button class="btn btn--on-primary" type="button" popovertarget="channels">Записатися на консультацію</button>
+        <FutureLink>Повний прайс</FutureLink>
+      </div>
+    </div>
+    <figure class="first-visit__photo">
+      <Picture
+        src={device}
+        formats={["avif", "webp"]} fallbackFormat="webp"
+        widths={[480, 800, 1040]}
+        sizes="(min-width: 900px) 30vw, 100vw"
+        alt="Лікар у рукавичці тримає портативний рентгенівський апарат"
+        loading="lazy"
+        decoding="async"
+      />
+    </figure>
+  </div>
+</section>
+
+<style>
+  .first-visit { background: var(--color-primary); color: var(--color-on-primary); padding-block: var(--section-pad); }
+  .first-visit__grid { display: grid; gap: var(--space-4); }
+  .first-visit__main { display: grid; gap: var(--space-4); min-width: 0; align-content: start; }
+  .first-visit h2 { max-width: 20ch; }
+  .figures { display: grid; gap: var(--space-3); }
+  .figure { display: grid; gap: 0; align-content: start; padding-top: var(--space-2); border-top: 1px solid var(--color-line-on-primary); }
+  .figure__value {
+    display: flex; align-items: baseline; gap: .12em;
+    font-size: var(--fs-figure); font-weight: 800; line-height: .95; letter-spacing: -0.035em; white-space: nowrap;
+  }
+  .figure--lead .figure__value { color: var(--color-accent); }
+  .figure--lead .figure__unit { color: var(--color-on-primary); }
+  .figure__from, .figure__unit { font-family: var(--font-display); font-size: var(--fs-h3); font-weight: 600; letter-spacing: 0; }
+  .figure__from { color: var(--color-muted-on-primary); }
+  @media (max-width: 639.98px) { .figure__from--empty { display: none; } }
+  .figure__label { margin-top: var(--space-1); }
+  .figure__label { font-size: var(--fs-lead); color: var(--color-muted-on-primary); }
+  .first-visit__note { font-size: var(--fs-lead); max-width: 34rem; }
+  .first-visit__actions { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-2) var(--space-3); }
+  .first-visit__photo { margin: 0; }
+  .first-visit__photo :global(img) { width: 100%; height: auto; aspect-ratio: 4 / 3; object-fit: cover; object-position: 50% 45%; }
+
+  @media (min-width: 640px) {
+    .figures { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--grid-gap); }
+  }
+  @media (min-width: 900px) {
+    .first-visit__grid { grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--grid-gap); align-items: stretch; }
+    .first-visit__main { grid-column: 1 / span 8; }
+    .first-visit__photo { grid-column: 9 / -1; }
+    .first-visit__photo { position: relative; min-height: 24rem; }
+    .first-visit__photo :global(picture) { position: absolute; inset: 0; }
+    .first-visit__photo :global(img) { position: absolute; inset: 0; height: 100%; aspect-ratio: auto; }
+  }
+  @media (max-width: 479.98px) {
+    .first-visit__actions .btn { width: 100%; min-height: 56px; }
+  }
+</style>

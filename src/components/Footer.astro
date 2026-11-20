@@ -1,0 +1,64 @@
+---
+import Logo from "./Logo.astro";
+import DayBar from "./DayBar.astro";
+import { clinics, phones, email, channels, facebook } from "../data/site";
+const social = [...channels.filter((c) => ["telegram", "viber", "whatsapp", "instagram"].includes(c.id)), facebook];
+---
+<footer class="site-footer">
+  <div class="container site-footer__grid">
+    <div class="site-footer__brand">
+      <Logo size="footer" />
+      <DayBar variant="line" label="Пн–Сб 9:00–21:00, Ужгород" />
+    </div>
+    {clinics.map((c) => (
+      <div class="site-footer__col">
+        <p class="site-footer__title">{c.city}</p>
+        <p>{c.address}</p>
+        <p class="site-footer__muted">{c.region}</p>
+      </div>
+    ))}
+    <div class="site-footer__col">
+      <p class="site-footer__title">Зв’язок</p>
+      <ul class="site-footer__links">
+        <li><a class="num" href={phones.main.href}>{phones.main.full}</a></li>
+        <li><a class="num" href={phones.second.href}>{phones.second.full}</a></li>
+        <li><a href={email.href}>{email.label}</a></li>
+      </ul>
+    </div>
+    <div class="site-footer__col">
+      <p class="site-footer__title">Месенджери і соцмережі</p>
+      <ul class="site-footer__links">
+        {social.map((s) => (
+          <li><a href={s.href} {...(s.external ? { target: "_blank", rel: "noopener" } : {})}>{s.label}</a></li>
+        ))}
+      </ul>
+    </div>
+  </div>
+  <div class="container site-footer__bottom">
+    <p>© 2026 Just Dent</p>
+  </div>
+</footer>
+
+<style>
+  .site-footer { background: var(--color-surface); padding-block: var(--space-5) var(--space-3); font-size: var(--fs-small); }
+  .site-footer__grid { display: grid; gap: var(--space-4) var(--grid-gap); grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .site-footer__brand { grid-column: 1 / -1; display: grid; gap: var(--space-3); max-width: 22rem; align-content: start; }
+  .site-footer__col { display: grid; gap: .25rem; align-content: start; }
+  .site-footer__title { font-family: var(--font-display); font-size: var(--fs-body); font-weight: 600; margin-bottom: var(--space-1); }
+  .site-footer__muted { color: var(--color-text-muted); }
+  .site-footer__links { display: grid; }
+  .site-footer__links a {
+    display: inline-flex; align-items: center; min-height: var(--tap); text-decoration: none; white-space: nowrap;
+    transition: color var(--dur-fast) var(--ease-out);
+  }
+  .site-footer__links a:hover { color: var(--color-primary); text-decoration: underline; text-underline-offset: .2em; }
+  .site-footer__bottom { margin-top: var(--space-4); padding-top: var(--space-2); border-top: 1px solid var(--color-border); color: var(--color-text-muted); }
+  @media (min-width: 1024px) {
+    .site-footer__grid { grid-template-columns: repeat(12, minmax(0, 1fr)); }
+    .site-footer__brand { grid-column: 1 / span 4; }
+    .site-footer__col:nth-child(2) { grid-column: 5 / span 2; }
+    .site-footer__col:nth-child(3) { grid-column: 7 / span 2; }
+    .site-footer__col:nth-child(4) { grid-column: 9 / span 2; }
+    .site-footer__col:nth-child(5) { grid-column: 11 / span 2; }
+  }
+</style>

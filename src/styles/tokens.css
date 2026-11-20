@@ -1,0 +1,138 @@
+/* Hallmark · shape: book page, day-schedule spine · genre: editorial · theme: custom · job: book · idea: "Сімейна стоматологія, до якої встигаєш: сторінка вибудувана навколо робочого дня 9:00–21:00 і прямих відповідей великими цифрами" · vibe: "light clinic, honest numbers, evening warmth"
+ * paper: #FFFFFF · accent: #1656B8 · display: Geologica · body: Commissioner · hero: full-width H1 on white over a full-bleed blue day band 9→21 with a warm evening segment, call and message actions in the band, doctors photo rising from band into the white · nav: sticky white bar, logo, 4 anchors + 2 future links, phone, book · footer: light surface, mini day line, two clinics, every channel labelled · imagery: client photos · signature: the day band 9:00–21:00 with its warm evening segment, repeated as a week and as a footer line
+ * axes: white/geometric-grotesk/deep-blue · surface: absolute · posture: committed · contrast: pass · fold: pass · v2.0.0 */
+/* Hallmark · pre-emit critique: P4 H5 E4 S4 R4 V4 · weakest: S, a clinic page can drift generic; the hours band, real prices and real staff photos carry the page instead of slogans */
+/* Hallmark · waive 7b · design/concept.md veon-concept colors: bg #FFFFFF, on-primary #FFFFFF · the approved concept sets pure white paper on purpose: a light clinic seen in the client photos, against the dark heroes of the current site and competitors */
+/* Hallmark · waive 78 · design/concept.md type scale: h2 34 px, H1 84 px, figures 120 px, city names 56 px · on this clinic page the loudest type after the H1 belongs to prices, hours and clinic towns, so section heads stay modest and the numbers lead */
+/* Hallmark · waive 44c · stamp hero: doctors photo rising from the blue band into the white zone · design/concept.md first screen puts the photo across band and headline, joining the hours band to the clinic people, so its centre sits lower than the text block */
+/* Hallmark · dismissed 23 · the warm evening segment is 3 of 12 hours of a 22 px band, well under 5% of the first screen; it is the concept signature (18:00–21:00) */
+/* Hallmark · dismissed 49 · .btn sets white-space: nowrap for every capsule, so «Записатися на консультацію» and «Подзвонити 095 086 36 31» never wrap; checked at 320 px */
+/* Hallmark · answered F4 · on phones the bottom bar owns the filled call button; once it appears the header call button turns to outline, so one filled call is on screen */
+/* Hallmark · answered F5 · the round outlined close button is a 44 px tap target in the sheets, not a decorative icon coin */
+
+/* Client design tokens — only from design/concept.md (veon-concept: colors, fonts). */
+@font-face {
+  font-family: "Geologica";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 900;
+  src: url("../assets/fonts/geologica-cyrillic-wght-normal.woff2") format("woff2");
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+@font-face {
+  font-family: "Geologica";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 900;
+  src: url("../assets/fonts/geologica-latin-wght-normal.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: "Commissioner";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 900;
+  src: url("../assets/fonts/commissioner-cyrillic-wght-normal.woff2") format("woff2");
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+@font-face {
+  font-family: "Commissioner";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 900;
+  src: url("../assets/fonts/commissioner-latin-wght-normal.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* Metric fallbacks: keep line breaks close while the web fonts load (CLS). */
+@font-face {
+  font-family: "Geologica Fallback";
+  src: local("Arial");
+  size-adjust: 108%;
+  ascent-override: 92%;
+  descent-override: 24%;
+  line-gap-override: 0%;
+}
+@font-face {
+  font-family: "Commissioner Fallback";
+  src: local("Arial");
+  size-adjust: 102%;
+  ascent-override: 96%;
+  descent-override: 25%;
+  line-gap-override: 0%;
+}
+
+:root {
+  /* Colour roles (concept.md «Дизайн-система для FULL») */
+  --color-bg: #FFFFFF;
+  --color-surface: #EEF3FA;
+  --color-text: #0F1B2D;
+  --color-text-muted: #52607A;
+  --color-primary: #1656B8;
+  --color-primary-hover: #124A9E;
+  --color-on-primary: #FFFFFF;
+  --color-brand-logo: #3C8BEA;
+  --color-accent: #FFB27A;
+  --color-accent-text: #A9481C;
+  --color-border: #E1E8F2;
+  --color-success: #1E7A4C;
+  --color-danger: #B42318;
+  --color-day-on-primary: rgb(255 255 255 / .6);
+  --color-line-on-primary: rgb(255 255 255 / .28);
+  --color-muted-on-primary: rgb(255 255 255 / .82);
+  --color-scrim: rgb(15 27 45 / .45);
+  --color-shadow: rgb(15 27 45 / .14);
+  --color-focus: #1656B8;
+  --color-focus-on-primary: #FFFFFF;
+
+  /* Type */
+  --font-display: "Geologica", "Geologica Fallback", system-ui, sans-serif;
+  --font-body: "Commissioner", "Commissioner Fallback", system-ui, sans-serif;
+  --fs-small: clamp(.875rem, .85rem + .1vw, .9375rem);      /* 14 / 15 */
+  --fs-body: clamp(1rem, .97rem + .12vw, 1.0625rem);         /* 16 / 17 */
+  --fs-lead: clamp(1.0625rem, .98rem + .4vw, 1.25rem);       /* 17 / 20 */
+  --fs-h3: clamp(1.25rem, 1.18rem + .3vw, 1.375rem);         /* 20 / 22 */
+  --fs-h2: clamp(1.75rem, 1.5rem + 1.1vw, 2.125rem);         /* 28 / 34 */
+  --fs-display: clamp(2.375rem, 1.6rem + 3.4vw, 3.5rem);     /* 38 / 56 */
+  --fs-h1: clamp(2.375rem, 1rem + 5.2vw, 5.25rem);           /* 38 / 84 */
+  --fs-figure: clamp(4rem, 2.4rem + 4.6vw, 6.5rem);          /* 64 / 104 (three figures share 8 columns) */
+  --lh-text: 1.55;
+  --lh-head: 1.05;
+  --track-display: -0.02em;
+
+  /* Spacing scale (step 8) */
+  --space-1: .5rem;   /* 8 */
+  --space-2: 1rem;    /* 16 */
+  --space-3: 1.5rem;  /* 24 */
+  --space-4: 2.5rem;  /* 40 */
+  --space-5: 4rem;    /* 64 */
+  --space-6: 6.5rem;  /* 104 */
+  --space-7: 10rem;   /* 160 */
+  --section-pad: clamp(var(--space-5), 3rem + 5vw, 7.5rem); /* 64 → 120 */
+
+  /* Grid */
+  --container: 1280px;
+  --gutter: clamp(1.25rem, -.3rem + 5.6vw, 5rem); /* 20 → 80 */
+  --space: var(--gutter);
+  --grid-gap: clamp(1rem, .7rem + 1vw, 1.5rem);
+
+  /* Shape */
+  --radius: 999px;
+  --radius-sheet: 1.5rem;
+  --radius-panel: .75rem;
+  --button-h: 3.5rem;
+  --header-h: 72px;
+  --tap: 44px;
+
+  /* Motion */
+  --ease-out: cubic-bezier(.2, .7, .2, 1);
+  --dur-fast: 180ms;
+  --dur-ui: 240ms;
+  --dur: 600ms;
+  --dur-band: 700ms;
+}
+@media (max-width: 767.98px) {
+  :root { --header-h: 60px; }
+}
+@media (min-width: 1024px) {
+  :root { --button-h: 3.25rem; }
+}

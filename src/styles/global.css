@@ -1,0 +1,131 @@
+/* Base: reset, accessibility, type, layout helpers, buttons. Colours and fonts only through tokens.css. */
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+html, body { overflow-x: clip; }
+body {
+  margin: 0;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-body);
+  font-size: var(--fs-body);
+  line-height: var(--lh-text);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+img, video, svg { display: block; max-width: 100%; height: auto; }
+picture { display: block; }
+h1, h2, h3 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 700;
+  line-height: var(--lh-head);
+  letter-spacing: var(--track-display);
+  overflow-wrap: break-word;
+  min-width: 0;
+  text-wrap: balance;
+}
+h2 { font-size: var(--fs-h2); }
+h3 { font-size: var(--fs-h3); font-weight: 600; letter-spacing: -0.01em; line-height: 1.2; }
+p { margin: 0; text-wrap: pretty; }
+ul, ol { margin: 0; padding: 0; list-style: none; }
+a { color: inherit; }
+::selection { background: var(--color-primary); color: var(--color-on-primary); }
+html { scrollbar-color: var(--color-text-muted) var(--color-surface); }
+button:disabled { cursor: not-allowed; opacity: .6; }
+.num { font-family: var(--font-display); font-variant-numeric: tabular-nums lining-nums; }
+
+:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 2px; transition: none; }
+.on-primary :focus-visible { outline-color: var(--color-focus-on-primary); }
+
+.skip-link {
+  position: absolute; left: 1rem; top: -100px; z-index: 100;
+  padding: var(--space-1) var(--space-2); background: var(--color-text); color: var(--color-bg);
+  border-radius: var(--radius-panel); font-weight: 600;
+}
+.skip-link:focus { top: 1rem; }
+
+.container { width: min(100% - 2 * var(--gutter), var(--container)); margin-inline: auto; }
+.visually-hidden {
+  position: absolute !important; width: 1px; height: 1px; overflow: hidden;
+  clip: rect(0 0 0 0); clip-path: inset(50%); white-space: nowrap;
+}
+.section { padding-block: var(--section-pad); }
+.section__head { display: grid; gap: var(--space-2); max-width: 46rem; margin-bottom: var(--space-4); }
+.section__lead { font-size: var(--fs-lead); color: var(--color-text-muted); }
+
+/* Anchor targets stay visible under the sticky header. */
+[id] { scroll-margin-top: calc(var(--header-h) + 16px); }
+
+/* Buttons: capsule (form of the day band and the round logo). */
+.btn {
+  --btn-bg: var(--color-primary);
+  --btn-fg: var(--color-on-primary);
+  --btn-bd: var(--color-primary);
+  display: inline-flex; align-items: center; justify-content: center; gap: .6rem;
+  min-height: var(--button-h); padding: 0 var(--space-3);
+  border: 2px solid var(--btn-bd); border-radius: var(--radius);
+  background: var(--btn-bg); color: var(--btn-fg);
+  font: 600 var(--fs-body) / 1 var(--font-body);
+  text-decoration: none; white-space: nowrap; cursor: pointer;
+  transition: background-color var(--dur-fast) var(--ease-out), border-color var(--dur-fast) var(--ease-out), color var(--dur-fast) var(--ease-out), transform var(--dur-fast) var(--ease-out);
+  -webkit-tap-highlight-color: transparent;
+}
+.btn svg { width: 1.25rem; height: 1.25rem; flex: none; }
+.btn:hover { --btn-bg: var(--color-primary-hover); --btn-bd: var(--color-primary-hover); }
+.btn:active { transform: scale(.98); }
+.btn:disabled, .btn[aria-disabled="true"] { --btn-bg: var(--color-surface); --btn-fg: var(--color-text-muted); --btn-bd: var(--color-border); cursor: not-allowed; transform: none; }
+.btn--on-primary { --btn-bg: var(--color-on-primary); --btn-fg: var(--color-primary); --btn-bd: var(--color-on-primary); }
+.btn--on-primary:hover { --btn-bg: var(--color-surface); --btn-bd: var(--color-surface); }
+.btn--ghost-on-primary { --btn-bg: transparent; --btn-fg: var(--color-on-primary); --btn-bd: var(--color-on-primary); }
+.btn--ghost-on-primary:hover { --btn-bg: var(--color-on-primary); --btn-fg: var(--color-primary); --btn-bd: var(--color-on-primary); }
+.btn--ghost { --btn-bg: transparent; --btn-fg: var(--color-primary); --btn-bd: var(--color-primary); }
+.btn--ghost:hover { --btn-bg: var(--color-primary); --btn-fg: var(--color-on-primary); --btn-bd: var(--color-primary); }
+.btn--sm { min-height: var(--tap); padding: 0 var(--space-2); font-size: var(--fs-small); }
+
+/* Text link with an underline that thickens on hover. */
+.link {
+  color: var(--color-primary); font-weight: 600;
+  text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: .2em;
+  transition: text-decoration-thickness var(--dur-fast) var(--ease-out), color var(--dur-fast) var(--ease-out);
+}
+.link:hover { text-decoration-thickness: 2px; color: var(--color-primary-hover); }
+
+/* FutureLink: a page that is not built yet. Muted text, dotted underline, note on hover and focus. */
+.future-link {
+  position: relative; display: inline-flex; align-items: center; min-height: var(--tap);
+  color: var(--color-text-muted); cursor: default;
+  text-decoration: underline dotted; text-decoration-thickness: 1px; text-underline-offset: .25em;
+}
+.future-link__note[aria-hidden="true"] {
+  position: absolute; left: 50%; top: calc(100% - .25rem);
+  transform: translate(-50%, -4px);
+  white-space: nowrap; padding: .4rem .65rem;
+  font-size: .8125rem; line-height: 1.2; font-weight: 400;
+  background: var(--color-text); color: var(--color-bg);
+  border-radius: var(--radius-panel); text-decoration: none;
+  opacity: 0; pointer-events: none;
+  transition: opacity 200ms var(--ease-out), transform 200ms var(--ease-out);
+  z-index: 30;
+}
+.future-link:hover .future-link__note, .future-link:focus-visible .future-link__note { opacity: 1; transform: translate(-50%, 0); }
+.on-primary .future-link { color: var(--color-muted-on-primary); }
+
+/* Reveal hook (src/scripts/reveal.ts). Hidden only when scripting runs. */
+[data-reveal] { transition: opacity var(--dur) var(--ease-out), transform var(--dur) var(--ease-out); transition-delay: var(--reveal-delay, 0ms); }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; transition-delay: 0ms !important; }
+  .btn:active { transform: none; }
+}
+
+/* Round icon button (close). */
+.icon-btn {
+  display: grid; place-items: center; width: var(--tap); height: var(--tap); flex: none;
+  border: 1px solid var(--color-border); border-radius: 50%;
+  background: var(--color-bg); color: var(--color-text); cursor: pointer;
+  transition: background-color var(--dur-fast) var(--ease-out), border-color var(--dur-fast) var(--ease-out);
+}
+.icon-btn:hover { background: var(--color-surface); border-color: var(--color-primary); }
+.icon-btn svg { width: 22px; height: 22px; }
